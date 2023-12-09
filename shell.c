@@ -1,5 +1,8 @@
-
-
+/*
+ * 2023/12/09 최종 작성  
+ * 본 프로그램은 23-2 시스템 프로그래밍 과제를 위해 작성한 작은 쉘 프로그램이다.
+ * 작성자: 2019003163 허재원, 2019063363 최수용 
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -276,7 +279,6 @@ static void execute_cmd(char *argv[]) {
  */
 int main(void) {
     char cmd[MAX_LINE+1];       /* 명령어를 저장하기 위한 버퍼 */
-    int len;                    /* 입력된 명령어의 길이 */
     pid_t pid;                  /* 자식 프로세스 아이디 */
     int background;             /* 백그라운드 실행 유무 */ 
     char *argv[MAX_LINE/2+1];   /* 명령어 인자를 저장하기 위한 배열 */
@@ -328,9 +330,9 @@ int main(void) {
 		 * 명령어 입력 도중 \을 통해 줄바꿈 후 추가 입력을 받을 수 있도록 한다.
 		 * fgets()는 문자열에 '\n', '\0' 를 모두 포함한다는 특성 고려.
 		 */
-		char *pos;
-		int current_len;
-		bool needMoreInput = false;
+		char *pos;					/* fgets()로 받은 명령어에서 '\n' 위치를 가리키는 포인터 */
+		int current_len;			/* 현재 명령어의 길이 */
+		bool needMoreInput = false; /* 추가적인 input을 결정하는 bool*/
 
 		pos = strchr(cmd, '\n');
 		if(pos != NULL && pos > cmd && *(pos-1) == '\\'){
@@ -371,7 +373,7 @@ int main(void) {
 		/*
 		 * 백그라운드 명령인지 확인하고, '&' 기호를 삭제한다.
 		 */
-		char* token = strtok(cmd, "\n");
+		char* token = strtok(cmd, "\n"); /* fgets()로 받은 명령어에서 '\n' 기준 앞 토큰 위치 반환 */
 
 		while (token != NULL) {
 			if (strcmp(token, "exit") == 0) {
